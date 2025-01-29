@@ -1,10 +1,14 @@
-# PhonePe API Integration
+# 📌 PhonePe API Integration
 
 This README outlines the steps to integrate PhonePe's Payment Gateway API into your project.
 
 ---
 
-## Prerequisites
+## 🔹 Introduction
+
+The PhonePe Payment Gateway API enables businesses to process payments, refunds, and transaction status checks securely. It uses a checksum-based authentication mechanism for secure communication.
+
+## ✅ Prerequisites
 
 Before starting, ensure the following:
 
@@ -16,9 +20,11 @@ Before starting, ensure the following:
 - **Postman**: For testing API requests.
 - **Callback URL**: A publicly accessible endpoint for receiving callbacks.
 
-## Environment Configuration
+## ✅ Environment Configuration
 
-```
+Create a `.env` file in your project directory:
+
+```env
 PHONEPE_UAT_URL=https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay
 PHONEPE_PROD_URL=https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay
 REDIRECT_UAT_URL=https://webhook.site/redirect-url
@@ -30,7 +36,7 @@ SALT_KEY=<your-salt-key>
 SALT_INDEX=<your-salt-index>
 ```
 
-## Sample Request for Pay Page
+## 🔗 Sample Request for Pay Page
 
 ```
 {
@@ -48,33 +54,48 @@ SALT_INDEX=<your-salt-index>
 }
 ```
 
-## Request Signing
+## 🔹 Request Signing
 
 ---
 
-PhonePe requires requests to be signed with a checksum for security. Below are the steps to generate the checksum:
+How to Calculate X-Verify/Checksum
 
-1. **Combine Data**  
-   Concatenate the following in the specified order:
+Header PhonePe requires that every request includes a signed checksum for security.
 
-   - `merchantId`
-   - `payload` (as a JSON string)
-   - `saltKey`
+Formula: `SHA256(Base64 encoded payload + API Endpoint + saltKey) + "###" + saltIndex`
 
-2. **Hash the Data**  
-   Use the SHA-256 algorithm to hash the concatenated string. You can use libraries like `crypto` in Node.js to generate the hash.
+1. **Steps to Generate Checksum**  
+   Convert the JSON payload to a Base64 string:
+   ```
+   const base64Payload = Buffer.from(JSON.stringify(payload)).toString('base64');
+   ```
+2. **Concatenate with API Endpoint & Salt Key**  
+   `dataToHash = base64Payload + "/pg/v1/pay" + saltKey`
 
-Example:
+3. **Hash using SHA-256**
 
-```javascript
-const crypto = require('crypto');
+   ```
+   const crypto = require('crypto');
+   const apiEndpoint = "/pg/v1/pay";
+   const saltKey = "your-salt-key";
+   const saltIndex = "your-salt-index";
 
-const dataToHash = merchantId + JSON.stringify(payload) + saltKey;
-const checksum = crypto.createHash('sha256').update(dataToHash).digest('hex');
-```
+   const dataToHash = base64Payload + apiEndpoint + saltKey;
+   const checksum = crypto.createHash('sha256').update(dataToHash).digest('hex');
+   ```
 
-3. **Include the Checksum**
+4. **Include the Checksum**
    Add the generated checksum to the X-VERIFY header in your API request.
 
    Example header:
    `X-VERIFY: checksum + "###" + saltIndex`
+
+**Example Computation:**
+
+```arduino
+SHA256(Base64Payload + "/pg/v1/pay" + SaltKey) + "###" + SaltIndex
+```
+
+## 🔹 References
+
+- 📄 [PhonePe Developer Documentation](https://developer.phonepe.com/)
