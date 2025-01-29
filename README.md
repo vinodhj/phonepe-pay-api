@@ -58,7 +58,7 @@ SALT_INDEX=<your-salt-index>
 
 ---
 
-How to Calculate X-Verify/Checksum
+**How to Calculate X-Verify/Checksum :**
 
 Header PhonePe requires that every request includes a signed checksum for security.
 
