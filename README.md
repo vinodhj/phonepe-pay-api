@@ -62,7 +62,7 @@ How to Calculate X-Verify/Checksum
 
 Header PhonePe requires that every request includes a signed checksum for security.
 
-Formula: `SHA256(Base64 encoded payload + API Endpoint + saltKey) + "###" + saltIndex`
+Formula : `SHA256(Base64 encoded payload + API Endpoint + saltKey) + "###" + saltIndex`
 
 1. **Steps to Generate Checksum**  
    Convert the JSON payload to a Base64 string:
