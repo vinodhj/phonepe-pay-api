@@ -5,3 +5,9 @@ compatibility_flags = ["nodejs_compat"]
 
 [observability]
 enabled = true
+
+[[d1_databases]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_name = "cf-jwt-auth-db"
+database_id = "4fcb7909-9ea5-4b57-b1ea-70ed04f53c4d"
+migrations_dir = "./db/migrations"
