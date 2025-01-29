@@ -49,20 +49,23 @@ SALT_INDEX=<your-salt-index>
 ```
 
 ## Request Signing
-------------------
+
+---
 
 PhonePe requires requests to be signed with a checksum for security. Below are the steps to generate the checksum:
 
 1. **Combine Data**  
    Concatenate the following in the specified order:
+
    - `merchantId`
    - `payload` (as a JSON string)
-   - `saltKey`  
+   - `saltKey`
 
 2. **Hash the Data**  
-Use the SHA-256 algorithm to hash the concatenated string. You can use libraries like `crypto` in Node.js to generate the hash.  
+   Use the SHA-256 algorithm to hash the concatenated string. You can use libraries like `crypto` in Node.js to generate the hash.
 
-Example:  
+Example:
+
 ```javascript
 const crypto = require('crypto');
 
@@ -71,10 +74,7 @@ const checksum = crypto.createHash('sha256').update(dataToHash).digest('hex');
 ```
 
 3. **Include the Checksum**
-    Add the generated checksum to the X-VERIFY header in your API request.
-    
-    Example header:
-    ```X-VERIFY: checksum + "###" + saltIndex```
+   Add the generated checksum to the X-VERIFY header in your API request.
 
-
-
+   Example header:
+   `X-VERIFY: checksum + "###" + saltIndex`
